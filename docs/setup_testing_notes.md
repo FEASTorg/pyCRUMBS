@@ -1,4 +1,4 @@
-# Setup and Testing Steps for pyCRUMBS on Raspberry Pi
+# Setup and Testing Notes
 
 This was tested using a Raspberry Pi 4B+ with the default Raspberry Pi OS Lite 64-bit distribution and an Arduino Nano R3 with a level shifter bridging the two.
 
@@ -54,7 +54,7 @@ This was tested using a Raspberry Pi 4B+ with the default Raspberry Pi OS Lite 6
 
 5. **Clone the pyCRUMBS Repository:**
 
-   - Clone your repository from GitHub:
+   - Clone repository from GitHub:
 
      ```bash
      git clone https://github.com/CameronBrooks11/pyCRUMBS.git
