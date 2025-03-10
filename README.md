@@ -1,2 +1,3 @@
 # pyCRUMBS
-pyCRUMBS is the Python implementation of the CRUMBS protocol for use on Raspberry Pi.
+
+pyCRUMBS is the Python implementation of the CRUMBS protocol for use with Raspberry Pi as the leader.
