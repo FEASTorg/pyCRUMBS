@@ -4,7 +4,7 @@ import sys
 import logging
 from pyCRUMBS import CRUMBS, CRUMBSMessage
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)  # Change to DEBUG level for more verbosity
 logger = logging.getLogger("LeaderExample")
 
 
@@ -26,6 +26,7 @@ def print_usage():
 
 
 def parse_message(input_str: str):
+    logger.debug("Parsing input string: %s", input_str)  # Debug input string
     parts = input_str.split(",")
     if len(parts) != 10:
         logger.error("Incorrect number of fields. Expected 10, got %d.", len(parts))
@@ -33,6 +34,7 @@ def parse_message(input_str: str):
     try:
         # Parse target address (supports hex and decimal)
         target_address_str = parts[0].strip()
+        logger.debug("Parsed target address string: %s", target_address_str)
         if target_address_str.lower().startswith("0x"):
             target_address = int(target_address_str, 16)
         else:
@@ -44,6 +46,7 @@ def parse_message(input_str: str):
         msg = CRUMBSMessage(
             typeID=typeID, commandType=commandType, data=data, errorFlags=errorFlags
         )
+        logger.debug("Parsed message: %s", msg)  # Debug the resulting message object
         return target_address, msg
     except Exception as e:
         logger.error("Failed to parse message: %s", e)
@@ -51,9 +54,11 @@ def parse_message(input_str: str):
 
 
 def main():
+    logger.debug("Starting main()")
     bus_number = 1  # Default I2C bus on Raspberry Pi
     crumbs = CRUMBS(bus_number)
     crumbs.begin()
+    logger.debug("I2C bus initialized")
 
     print("pyCRUMBS Leader Example (Master) Running")
     print_usage()
@@ -61,7 +66,9 @@ def main():
     while True:
         try:
             line = input("Enter command: ").strip()
+            logger.debug("User entered command: %s", line)  # Debug user input
             if line.lower() == "exit":
+                logger.debug("Exit command received")
                 break
             if line.lower().startswith("request"):
                 # Format: request,target_address
@@ -74,7 +81,9 @@ def main():
                     target_address = int(target_address_str, 16)
                 else:
                     target_address = int(target_address_str)
+                logger.debug("Requesting message from address: 0x%02X", target_address)
                 response = crumbs.request_message(target_address)
+                logger.debug("Response raw data: %s", response)
                 if response:
                     print("Received response:")
                     print(response)
@@ -85,16 +94,25 @@ def main():
                 if msg is None:
                     print("Failed to parse message. Please check your input.")
                     continue
+                logger.debug(
+                    "Sending message %s to address 0x%02X", msg, target_address
+                )
                 crumbs.send_message(msg, target_address)
                 print("Message sent.")
         except KeyboardInterrupt:
+            logger.debug("KeyboardInterrupt received, exiting loop")
             break
         except Exception as e:
             logger.error("Error in main loop: %s", e)
 
     crumbs.close()
     print("Exiting pyCRUMBS Leader Example.")
+    logger.debug("I2C bus closed, program exiting")
 
 
 if __name__ == "__main__":
+    # Optionally, print sys.path for debug:
+    import sys
+
+    logger.debug("sys.path: %s", sys.path)
     main()
