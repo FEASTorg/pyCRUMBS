@@ -36,7 +36,7 @@ After setup, verify the installation:
 Then test the installation:
 
 ```bash
-./test_pycrumbs.sh
+~/test_pycrumbs.sh
 ```
 
 For detailed automated setup instructions, see [`docs/auto_setup_testing.md`](docs/auto_setup_testing.md).
@@ -51,7 +51,7 @@ After setup, you can run the leader example to test I2C communication:
 
 ```bash
 # Activate the environment
-./activate_pycrumbs.sh
+~/activate_pycrumbs.sh
 
 # Run the leader example
 cd ..
@@ -60,8 +60,8 @@ python -m pyCRUMBS.examples.leader_example
 
 ### Example Commands
 
-- **Request a Message**: `request,0x0a`
-- **Send a Message**: `0x0a,1,1,1,0,0,0,0,0,0`
+- **Request a Message**: `request,0x08`
+- **Send a Message**: `0x08,1,1,75.0,1.0,0.0,65.0,2.0,7.0,0`
 - **Exit**: `exit` or Ctrl+C
 
 ## Hardware Requirements
@@ -74,7 +74,6 @@ python -m pyCRUMBS.examples.leader_example
 
 - [`docs/auto_setup_testing.md`](docs/auto_setup_testing.md) - Automated setup guide
 - [`docs/manual_setup_testing.md`](docs/manual_setup_testing.md) - Manual setup and troubleshooting
-- [`examples/leader_example.py`](examples/leader_example.py) - Example implementation
 
 ## Troubleshooting
 
@@ -85,3 +84,12 @@ Common issues and solutions:
 - **I2C detection issues**: Check wiring and use `i2cdetect -y 1` to verify devices
 
 For detailed troubleshooting, see the documentation files above.
+
+## Next Steps
+
+After successful setup, you can:
+
+1. **Develop Custom Applications**: Use the pyCRUMBS library in your own Python scripts
+2. **Modify Examples**: Customize the leader example for your specific use case
+3. **Add More Devices**: Connect additional I2C devices and test communication
+4. **Integrate with Projects**: Use pyCRUMBS as part of larger Raspberry Pi projects

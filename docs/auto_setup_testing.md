@@ -1,6 +1,6 @@
 # Automated Setup and Testing Guide
 
-This guide provides an automated setup process for pyCRUMBS on Raspberry Pi using the included setup script. This method significantly simplifies the manual setup process documented in `manual_setup_testing.md`.
+This guide provides an automated setup process for pyCRUMBS on Raspberry Pi using the included setup script. This method significantly simplifies the manual setup process documented in [`manual_setup_testing.md`](manual_setup_testing.md).
 
 ## Prerequisites
 
@@ -61,13 +61,14 @@ The script will handle everything automatically and may prompt for a reboot if I
 After setup (and any required reboot), verify the installation:
 
 ```bash
+cd ~/pyCRUMBS
 ./verify_setup.sh
 ```
 
 Then test the setup:
 
 ```bash
-./test_pycrumbs.sh
+~/test_pycrumbs.sh
 ```
 
 ## What the Setup Script Does
@@ -75,11 +76,13 @@ Then test the setup:
 The automated setup script (`setup_pycrumbs.sh`) performs the following operations:
 
 1. **System Update**: Updates package lists and installs required system packages
+
    - `i2c-tools` for I2C communication testing
    - `git` for repository management
    - `python3`, `python3-venv`, `python3-pip` for Python development
 
 2. **I2C Configuration**: Automatically detects and enables I2C using multiple methods:
+
    - Uses `raspi-config nonint do_i2c 0` for automatic enabling
    - Falls back to direct `/boot/firmware/config.txt` modification if needed
    - Creates backups before making changes
@@ -106,7 +109,7 @@ The setup script creates two helper scripts in your home directory:
 Activates the Python virtual environment and navigates to the repository:
 
 ```bash
-./activate_pycrumbs.sh
+~/activate_pycrumbs.sh
 ```
 
 ### `test_pycrumbs.sh`
@@ -114,7 +117,7 @@ Activates the Python virtual environment and navigates to the repository:
 Runs a complete test of the setup:
 
 ```bash
-./test_pycrumbs.sh
+~/test_pycrumbs.sh
 ```
 
 ## Testing I2C Communication
@@ -133,10 +136,10 @@ To run the leader example for testing communication:
 
 ```bash
 # Method 1: Use the test script
-./test_pycrumbs.sh
+~/test_pycrumbs.sh
 
 # Method 2: Manual activation
-./activate_pycrumbs.sh
+~/activate_pycrumbs.sh
 cd ..
 python -m pyCRUMBS.examples.leader_example
 ```
@@ -145,8 +148,8 @@ python -m pyCRUMBS.examples.leader_example
 
 Once the leader example is running, you can test with these commands:
 
-- **Request a Message**: `request,0x0a`
-- **Send a Message**: `0x0a,1,1,1,0,0,0,0,0,0`
+- **Request a Message**: `request,0x08`
+- **Send a Message**: `0x08,1,1,75.0,1.0,0.0,65.0,2.0,7.0,0`
 - **Exit**: `exit` or press Ctrl+C
 
 ## Troubleshooting
@@ -190,7 +193,7 @@ If you get `ModuleNotFoundError`:
 
 If virtual environment activation fails:
 
-1. Delete the environment: `rm -rf ~/pycrumbs_env`
+1. Delete the environment: `rm -rf ./pycrumbs_env`
 2. Re-run the setup script: `./setup_pycrumbs.sh`
 
 ## Manual Cleanup
@@ -213,15 +216,15 @@ cd .. && rm -rf pyCRUMBS
 
 ## Comparison with Manual Setup
 
-| Task | Manual Process | Automated Process |
-|------|----------------|-------------------|
-| System updates | Multiple apt commands | Single script execution |
-| I2C configuration | Manual raspi-config navigation | Fully automated with fallback methods |
-| Virtual environment | Manual creation and activation | Automatic creation with error handling |
-| Package installation | Manual pip commands | Automatic with dependency management |
-| Repository cloning | Manual git commands | Automatic with cleanup of existing installs |
-| Permission setup | Manual group addition | Automatic with instructions |
-| Testing | Manual navigation and execution | One-command testing script |
+| Task                 | Manual Process                  | Automated Process                           |
+| -------------------- | ------------------------------- | ------------------------------------------- |
+| System updates       | Multiple apt commands           | Single script execution                     |
+| I2C configuration    | Manual raspi-config navigation  | Fully automated with fallback methods       |
+| Virtual environment  | Manual creation and activation  | Automatic creation with error handling      |
+| Package installation | Manual pip commands             | Automatic with dependency management        |
+| Repository cloning   | Manual git commands             | Automatic with cleanup of existing installs |
+| Permission setup     | Manual group addition           | Automatic with instructions                 |
+| Testing              | Manual navigation and execution | One-command testing script                  |
 
 The automated setup reduces setup time from ~15-20 minutes to ~3-5 minutes, with significantly reduced chance of user error.
 

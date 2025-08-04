@@ -1,6 +1,3 @@
-# File: pyCRUMBS/examples/leader_example.py
-
-import sys
 import logging
 from pyCRUMBS import CRUMBS, CRUMBSMessage
 

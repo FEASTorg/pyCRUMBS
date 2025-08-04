@@ -94,7 +94,7 @@ enable_i2c() {
     if grep -q "^dtparam=i2c_arm=on" "$config_file"; then
         print_success "I2C already enabled in config.txt"
         return 0
-    elif grep -q "^#dtparam=i2c_arm=on" "$config_file"; then
+        elif grep -q "^#dtparam=i2c_arm=on" "$config_file"; then
         # Uncomment existing line
         print_status "Uncommenting dtparam=i2c_arm=on in config.txt..."
         sudo sed -i 's/^#dtparam=i2c_arm=on/dtparam=i2c_arm=on/' "$config_file"
@@ -232,7 +232,7 @@ EOF
 
 chmod +x "$HOME/test_pycrumbs.sh"
 
-print_success "Convenience scripts created:"
+print_success "Convenience scripts created in your home directory:"
 echo "  - $HOME/activate_pycrumbs.sh (activate environment)"
 echo "  - $HOME/test_pycrumbs.sh (run test example)"
 
@@ -249,16 +249,19 @@ echo "the i2c group membership to take effect."
 echo ""
 echo "After logging back in, you can:"
 echo ""
-echo "1. Test the setup:"
-echo "   ./test_pycrumbs.sh"
+echo "1. Verify the installation:"
+echo "   ./verify_setup.sh"
 echo ""
-echo "2. Or manually activate the environment:"
-echo "   ./activate_pycrumbs.sh"
+echo "2. Test the setup:"
+echo "   ~/test_pycrumbs.sh"
 echo ""
-echo "3. Check I2C devices:"
+echo "3. Or manually activate the environment:"
+echo "   ~/activate_pycrumbs.sh"
+echo ""
+echo "4. Check I2C devices:"
 echo "   i2cdetect -y 1"
 echo ""
-echo "4. Run the leader example:"
+echo "5. Run the leader example:"
 echo "   cd .. && python -m pyCRUMBS.examples.leader_example"
 echo ""
 print_warning "If you encounter permission issues with I2C, try rebooting the system."
