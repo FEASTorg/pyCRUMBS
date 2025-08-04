@@ -33,18 +33,21 @@ print_status "pyCRUMBS Installation Verification"
 echo "========================================"
 
 # Check if virtual environment exists
-if [ -d "$HOME/pycrumbs_env" ]; then
-    print_success "Virtual environment found"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV_DIR="$SCRIPT_DIR/pycrumbs_env"
+
+if [ -d "$VENV_DIR" ]; then
+    print_success "Virtual environment found at $VENV_DIR"
 else
-    print_error "Virtual environment not found at $HOME/pycrumbs_env"
+    print_error "Virtual environment not found at $VENV_DIR"
     exit 1
 fi
 
-# Check if repository exists
-if [ -d "$HOME/pyCRUMBS" ]; then
-    print_success "Repository found"
+# Check if repository exists (we should be in it)
+if [ -f "$SCRIPT_DIR/CRUMBS.py" ] && [ -f "$SCRIPT_DIR/setup.py" ]; then
+    print_success "Repository structure verified"
 else
-    print_error "Repository not found at $HOME/pyCRUMBS"
+    print_error "Repository structure incomplete"
     exit 1
 fi
 
@@ -57,7 +60,7 @@ fi
 
 # Activate environment and test Python imports
 print_status "Testing Python environment..."
-source "$HOME/pycrumbs_env/bin/activate"
+source "$VENV_DIR/bin/activate"
 
 # Test smbus2 import
 if python3 -c "import smbus2" 2>/dev/null; then
@@ -68,7 +71,7 @@ else
 fi
 
 # Test pyCRUMBS import
-cd "$HOME"
+cd "$SCRIPT_DIR/.."
 if python3 -c "from pyCRUMBS import CRUMBS, CRUMBSMessage" 2>/dev/null; then
     print_success "pyCRUMBS package imports successfully"
 else

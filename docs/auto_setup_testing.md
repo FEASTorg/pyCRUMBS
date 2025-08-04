@@ -87,13 +87,15 @@ The automated setup script (`setup_pycrumbs.sh`) performs the following operatio
 
 3. **User Permissions**: Adds the current user to the `i2c` group for device access
 
-4. **Python Environment**: Creates a dedicated virtual environment at `~/pycrumbs_env`
+4. **Python Environment**: Creates a dedicated virtual environment at `./pycrumbs_env` (within the repository)
 
 5. **Python Packages**: Installs required Python packages (`smbus2`) in the virtual environment
 
-6. **Repository Setup**: Clones the pyCRUMBS repository to `~/pyCRUMBS`
+6. **Repository Update**: Updates the current repository to the latest version (since you're already in it)
 
 7. **Convenience Scripts**: Creates helper scripts for easy environment management
+
+The virtual environment is created within the repository directory for better organization and portability.
 
 ## Convenience Scripts Created
 
@@ -196,17 +198,17 @@ If virtual environment activation fails:
 To remove the automated setup:
 
 ```bash
-# Remove virtual environment
-rm -rf ~/pycrumbs_env
-
-# Remove repository
-rm -rf ~/pyCRUMBS
+# Remove virtual environment (from within the repository)
+rm -rf ./pycrumbs_env
 
 # Remove convenience scripts
 rm ~/activate_pycrumbs.sh ~/test_pycrumbs.sh
 
 # Remove user from i2c group (optional)
 sudo deluser $USER i2c
+
+# Remove entire repository (if desired)
+cd .. && rm -rf pyCRUMBS
 ```
 
 ## Comparison with Manual Setup

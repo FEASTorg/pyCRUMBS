@@ -170,7 +170,7 @@ sudo adduser $USER i2c
 print_success "User added to i2c group"
 
 # Step 4: Create virtual environment
-VENV_DIR="$HOME/pycrumbs_env"
+VENV_DIR="$PWD/pycrumbs_env"
 print_status "Creating Python virtual environment at $VENV_DIR..."
 
 if [ -d "$VENV_DIR" ]; then
@@ -188,29 +188,20 @@ pip install --upgrade pip
 pip install smbus2
 print_success "Python packages installed"
 
-# Step 6: Clone pyCRUMBS repository
-REPO_DIR="$HOME/pyCRUMBS"
-print_status "Cloning pyCRUMBS repository..."
-
-if [ -d "$REPO_DIR" ]; then
-    print_warning "Repository directory already exists. Removing old repository..."
-    rm -rf "$REPO_DIR"
-fi
-
-git clone https://github.com/FEASTorg/pyCRUMBS.git "$REPO_DIR"
-print_success "Repository cloned"
-
-# Step 7: Create convenience scripts
+# Step 6: Create convenience scripts
 print_status "Creating convenience scripts..."
 
+# Get the current repository directory
+REPO_DIR="$PWD"
+
 # Create activation script
-cat > "$HOME/activate_pycrumbs.sh" << 'EOF'
+cat > "$HOME/activate_pycrumbs.sh" << EOF
 #!/bin/bash
 # Activate pyCRUMBS environment
-source "$HOME/pycrumbs_env/bin/activate"
-cd "$HOME/pyCRUMBS"
+source "$REPO_DIR/pycrumbs_env/bin/activate"
+cd "$REPO_DIR"
 echo "pyCRUMBS environment activated!"
-echo "Current directory: $(pwd)"
+echo "Current directory: \$(pwd)"
 echo ""
 echo "To run the leader example:"
 echo "  cd .."
@@ -226,11 +217,11 @@ EOF
 chmod +x "$HOME/activate_pycrumbs.sh"
 
 # Create test script
-cat > "$HOME/test_pycrumbs.sh" << 'EOF'
+cat > "$HOME/test_pycrumbs.sh" << EOF
 #!/bin/bash
 # Test pyCRUMBS setup
-source "$HOME/pycrumbs_env/bin/activate"
-cd "$HOME"
+source "$REPO_DIR/pycrumbs_env/bin/activate"
+cd "$REPO_DIR/.."
 echo "Testing pyCRUMBS setup..."
 echo "Checking I2C devices:"
 i2cdetect -y 1
@@ -245,10 +236,13 @@ print_success "Convenience scripts created:"
 echo "  - $HOME/activate_pycrumbs.sh (activate environment)"
 echo "  - $HOME/test_pycrumbs.sh (run test example)"
 
-# Step 8: Final instructions
+# Step 7: Final instructions
 echo ""
 echo "========================================"
 print_success "pyCRUMBS setup completed successfully!"
+echo ""
+echo "Virtual environment created at: $REPO_DIR/pycrumbs_env"
+echo "Repository location: $REPO_DIR"
 echo ""
 echo "IMPORTANT: You may need to log out and log back in (or reboot) for"
 echo "the i2c group membership to take effect."
@@ -265,6 +259,6 @@ echo "3. Check I2C devices:"
 echo "   i2cdetect -y 1"
 echo ""
 echo "4. Run the leader example:"
-echo "   cd ~/pyCRUMBS && cd .. && python -m pyCRUMBS.examples.leader_example"
+echo "   cd .. && python -m pyCRUMBS.examples.leader_example"
 echo ""
 print_warning "If you encounter permission issues with I2C, try rebooting the system."
