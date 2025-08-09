@@ -182,11 +182,12 @@ python3 -m venv "$VENV_DIR"
 print_success "Virtual environment created"
 
 # Step 5: Activate virtual environment and install Python packages
-print_status "Activating virtual environment and installing Python packages..."
+
+print_status "Activating virtual environment and installing Python packages via setup.py..."
 source "$VENV_DIR/bin/activate"
 pip install --upgrade pip
-pip install smbus2
-print_success "Python packages installed"
+pip install -e .
+print_success "pyCRUMBS package and dependencies installed"
 
 # Step 6: Create convenience scripts
 print_status "Creating convenience scripts..."

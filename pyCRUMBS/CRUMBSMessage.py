@@ -19,6 +19,6 @@ class CRUMBSMessage:
     data: List[float] = field(default_factory=lambda: [0.0] * 6)
     errorFlags: int = 0
 
-    def __str__(self):
-        data_str = ", ".join(f"{d:.2f}" for d in self.data)
+    def __str__(self) -> str:
+        data_str: str = ", ".join(f"{d:.2f}" for d in self.data)
         return f"CRUMBSMessage(typeID={self.typeID}, commandType={self.commandType}, data=[{data_str}], errorFlags={self.errorFlags})"

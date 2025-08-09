@@ -79,7 +79,7 @@ def main():
                     print("No valid response received.")
             else:
                 target_address, msg = parse_message(line)
-                if msg is None:
+                if msg is None or target_address is None:
                     print("Failed to parse message. Please check your input.")
                     continue
                 crumbs.send_message(msg, target_address)

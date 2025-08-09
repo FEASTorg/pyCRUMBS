@@ -44,10 +44,10 @@ else
 fi
 
 # Check if repository exists (we should be in it)
-if [ -f "$SCRIPT_DIR/CRUMBS.py" ] && [ -f "$SCRIPT_DIR/setup.py" ]; then
+if [ -f "$SCRIPT_DIR/pyCRUMBS/CRUMBS.py" ] && [ -f "$SCRIPT_DIR/pyCRUMBS/CRUMBSMessage.py" ] && [ -f "$SCRIPT_DIR/setup.py" ]; then
     print_success "Repository structure verified"
 else
-    print_error "Repository structure incomplete"
+    print_error "Repository structure incomplete (missing pyCRUMBS/CRUMBS.py or pyCRUMBS/CRUMBSMessage.py or setup.py)"
     exit 1
 fi
 
