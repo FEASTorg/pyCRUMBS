@@ -82,8 +82,10 @@ def main():
                 if msg is None or target_address is None:
                     print("Failed to parse message. Please check your input.")
                     continue
-                crumbs.send_message(msg, target_address)
-                print("Message sent.")
+                if crumbs.send_message(msg, target_address):
+                    print("Message sent successfully.")
+                else:
+                    print("Failed to send message.")
         except KeyboardInterrupt:
             break
         except Exception as e:

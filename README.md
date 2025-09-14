@@ -1,95 +1,56 @@
 # pyCRUMBS
 
-pyCRUMBS is the Python implementation of the CRUMBS protocol for use with Raspberry Pi as the leader.
+pyCRUMBS is a Python library implementing the CRUMBS protocol for I2C communication on Raspberry Pi. It enables structured message exchange between a Raspberry Pi (master/leader) and Arduino or other microcontroller devices (slaves).
 
-## Quick Setup (Automated)
+## Features
 
-For Raspberry Pi users, we provide a fully automated setup script that handles all configuration including I2C enabling:
+- **Simple API**: Easy-to-use classes for I2C communication
+- **Structured Messages**: 27-byte fixed-format messages with automatic encoding/decoding
+- **Error Handling**: Comprehensive error detection and recovery
+- **Cross-Platform**: Compatible with any I2C-enabled Linux system
+- **Well Documented**: Complete API documentation and examples
+
+## Quick Start
+
+```python
+from pyCRUMBS import CRUMBS, CRUMBSMessage
+
+crumbs = CRUMBS()
+crumbs.begin()
+message = CRUMBSMessage(typeID=1, commandType=1, data=[1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+crumbs.send_message(message, 0x08)
+```
+
+## Installation
 
 ```bash
-# First, update system and install git
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y git
-
-# Then clone and run setup
 git clone https://github.com/FEASTorg/pyCRUMBS.git
 cd pyCRUMBS
 chmod +x setup_pycrumbs.sh
 ./setup_pycrumbs.sh
 ```
 
-The script automatically:
-
-- Updates system packages
-- Enables I2C (no manual raspi-config needed!)
-- Sets up Python virtual environment
-- Installs required packages
-- Configures user permissions
-- Creates convenience scripts
-
-After setup, verify the installation:
-
-```bash
-./verify_setup.sh
-```
-
-Then test the installation:
-
-```bash
-~/test_pycrumbs.sh
-```
-
-For detailed automated setup instructions, see [`docs/auto_setup_testing.md`](docs/auto_setup_testing.md).
-
-## Manual Setup
-
-For manual setup instructions and detailed troubleshooting, see [`docs/manual_setup_testing.md`](docs/manual_setup_testing.md).
-
-## Usage
-
-After setup, you can run the leader example to test I2C communication:
-
-```bash
-# Activate the environment
-~/activate_pycrumbs.sh
-
-# Run the leader example
-cd ..
-python -m pyCRUMBS.examples.leader_example
-```
-
-### Example Commands
-
-- **Request a Message**: `request,0x08`
-- **Send a Message**: `0x08,1,1,75.0,1.0,0.0,65.0,2.0,7.0,0`
-- **Exit**: `exit` or Ctrl+C
-
 ## Hardware Requirements
 
-- Raspberry Pi 4B+ (or compatible) with Raspberry Pi OS
-- I2C devices (e.g., Arduino with appropriate level shifters)
-- Proper I2C wiring with level shifting for voltage compatibility
+- Raspberry Pi or compatible Linux system with I2C enabled
+- I2C bus with 4.7kΩ pull-up resistors on SDA/SCL lines
+- Unique addresses (0x08-0x77) for each peripheral device
 
 ## Documentation
 
-- [`docs/auto_setup_testing.md`](docs/auto_setup_testing.md) - Automated setup guide
-- [`docs/manual_setup_testing.md`](docs/manual_setup_testing.md) - Manual setup and troubleshooting
+Complete documentation is available in the [docs](docs/) directory:
 
-## Troubleshooting
+- [Getting Started](docs/getting-started.md) - Installation and basic usage
+- [API Reference](docs/api-reference.md) - Complete class documentation
+- [Protocol Specification](docs/protocol.md) - Message format details
+- [Examples](docs/examples.md) - Code examples and patterns
 
-Common issues and solutions:
+## Examples
 
-- **Permission errors**: Ensure user is in `i2c` group and reboot if needed
-- **Module import errors**: Run from parent directory using `python -m pyCRUMBS.examples.leader_example`
-- **I2C detection issues**: Check wiring and use `i2cdetect -y 1` to verify devices
+The library includes working Python examples:
 
-For detailed troubleshooting, see the documentation files above.
+- **Leader Example**: Interactive interface for sending commands and requesting data
 
-## Next Steps
+## License
 
-After successful setup, you can:
-
-1. **Develop Custom Applications**: Use the pyCRUMBS library in your own Python scripts
-2. **Modify Examples**: Customize the leader example for your specific use case
-3. **Add More Devices**: Connect additional I2C devices and test communication
-4. **Integrate with Projects**: Use pyCRUMBS as part of larger Raspberry Pi projects
+AGPL-3.0 - see [LICENSE](LICENSE) file for details.

@@ -78,11 +78,12 @@ class CRUMBS:
             logger.error("Decoding error: %s", e)
             return None
 
-    def send_message(self, message: CRUMBSMessage, target_address: int) -> None:
+    def send_message(self, message: CRUMBSMessage, target_address: int) -> bool:
         """
         Sends a CRUMBSMessage to the specified I2C target address.
         :param message: The message to send.
         :param target_address: I2C address of the target device.
+        :return: True if message sent successfully, False otherwise.
         """
         encoded = self.encode_message(message)
         if len(encoded) != CRUMBS_MESSAGE_SIZE:
@@ -91,19 +92,22 @@ class CRUMBS:
                 CRUMBS_MESSAGE_SIZE,
                 len(encoded),
             )
-            return
+            return False
         try:
             # Create an I2C write message with the raw bytes.
             write = i2c_msg.write(target_address, encoded)
             if self.bus is not None:
                 self.bus.i2c_rdwr(write)
                 logger.info("Message sent to address 0x%02X", target_address)
+                return True
             else:
                 logger.error(
                     "I2C bus is not open. Call begin() before sending messages."
                 )
+                return False
         except Exception as e:
             logger.error("Failed to send message: %s", e)
+            return False
 
     def request_message(self, target_address: int) -> CRUMBSMessage | None:
         """
