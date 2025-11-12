@@ -13,7 +13,7 @@ authors = [{ name = "Cameron K. Brooks", email = "cbrook49@uwo.ca" }]
 license = { text = "AGPL-3.0" }
 readme = "README.md"
 requires-python = ">=3.7"
-dependencies = ["smbus2"]
+dependencies = ["smbus2", "pycrc"]
 
 [project.urls]
 Homepage = "https://github.com/FEASTorg/pyCRUMBS"

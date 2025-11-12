@@ -1,6 +1,6 @@
 # Getting Started with pyCRUMBS
 
-pyCRUMBS enables I2C communication between Raspberry Pi and Arduino devices using a structured 27-byte message protocol.
+pyCRUMBS enables I2C communication between Raspberry Pi and Arduino devices using a structured 31-byte message protocol that now includes a CRC-8 checksum for each frame.
 
 ## Installation
 
@@ -34,7 +34,11 @@ crumbs = CRUMBS()
 crumbs.begin()
 
 # Send message
-message = CRUMBSMessage(typeID=1, commandType=1, data=[25.5, 50.0, 75.5, 100.0, 0.0, 0.0])
+message = CRUMBSMessage(
+    typeID=1,
+    commandType=1,
+    data=[25.5, 50.0, 75.5, 100.0, 0.0, 0.0, 0.0],
+)
 crumbs.send_message(message, 0x08)
 
 # Request response
@@ -47,12 +51,25 @@ crumbs.close()
 
 ## Message Format
 
-| Field         | Type          | Description  | Range    |
-| ------------- | ------------- | ------------ | -------- |
-| `typeID`      | `int`         | Message type | 0-255    |
-| `commandType` | `int`         | Command ID   | 0-255    |
-| `data`        | `List[float]` | Six floats   | IEEE 754 |
-| `errorFlags`  | `int`         | Error bits   | 0-255    |
+| Field         | Type          | Description            | Range    |
+| ------------- | ------------- | ---------------------- | -------- |
+| `typeID`      | `int`         | Message type           | 0-255    |
+| `commandType` | `int`         | Command ID             | 0-255    |
+| `data`        | `List[float]` | Seven floats (payload) | IEEE 754 |
+| `crc8`        | `int`         | CRC-8 checksum         | 0-255    |
+
+The library automatically calculates and appends the CRC when sending messages. The `crc8` field is exposed so received frames can report the checksum that was validated.
+
+## CRC-8 Support
+
+To build the optional native CRC-8 helper (recommended for performance), generate and compile the shared library from the project root:
+
+```bash
+python scripts/generate_crc8_c99.py
+python scripts/compile_crc8_c99.py
+```
+
+If the compiled library is unavailable, pyCRUMBS falls back to a pure-Python CRC implementation at runtime.
 
 ## Hardware
 

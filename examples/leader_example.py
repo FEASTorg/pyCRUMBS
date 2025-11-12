@@ -9,10 +9,11 @@ def print_usage():
     print("Usage:")
     print("  To send a message, enter comma-separated values:")
     print(
-        "    target_address,typeID,commandType,data0,data1,data2,data3,data4,data5,errorFlags"
+        "    target_address,typeID,commandType,"
+        "data0,data1,data2,data3,data4,data5,data6"
     )
     print("  Example:")
-    print("    0x08,1,1,75.0,1.0,0.0,65.0,2.0,7.0,0")
+    print("    0x08,1,1,75.0,1.0,0.0,65.0,2.0,7.0,3.14")
     print("")
     print("  To request a message from a target device, type:")
     print("    request,target_address")
@@ -36,13 +37,10 @@ def parse_message(input_str: str):
             target_address = int(target_address_str)
         typeID = int(parts[1].strip())
         commandType = int(parts[2].strip())
-        data = [float(x.strip()) for x in parts[3:9]]
-        errorFlags = int(parts[9].strip())
-        msg = CRUMBSMessage(
-            typeID=typeID, commandType=commandType, data=data, errorFlags=errorFlags
-        )
+        data = [float(x.strip()) for x in parts[3:10]]
+        msg = CRUMBSMessage(typeID=typeID, commandType=commandType, data=data)
         return target_address, msg
-    except Exception as e:
+    except (ValueError, TypeError) as e:
         logger.error("Failed to parse message: %s", e)
         return None, None
 
@@ -88,7 +86,7 @@ def main():
                     print("Failed to send message.")
         except KeyboardInterrupt:
             break
-        except Exception as e:
+        except (OSError, ValueError, RuntimeError) as e:
             logger.error("Error in main loop: %s", e)
 
     crumbs.close()

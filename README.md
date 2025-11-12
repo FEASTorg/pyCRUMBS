@@ -5,8 +5,8 @@ pyCRUMBS is a Python library implementing the CRUMBS protocol for I2C communicat
 ## Features
 
 - **Simple API**: Easy-to-use classes for I2C communication
-- **Structured Messages**: 27-byte fixed-format messages with automatic encoding/decoding
-- **Error Handling**: Comprehensive error detection and recovery
+- **Structured Messages**: 31-byte fixed-format messages with automatic encoding/decoding
+- **CRC-8 Integrity**: Matches the embedded firmware's AceCRC configuration for parity checks
 - **Cross-Platform**: Compatible with any I2C-enabled Linux system
 - **Well Documented**: Complete API documentation and examples
 
@@ -17,7 +17,11 @@ from pyCRUMBS import CRUMBS, CRUMBSMessage
 
 crumbs = CRUMBS()
 crumbs.begin()
-message = CRUMBSMessage(typeID=1, commandType=1, data=[1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+message = CRUMBSMessage(
+    typeID=1,
+    commandType=1,
+    data=[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0],
+)
 crumbs.send_message(message, 0x08)
 ```
 
@@ -28,6 +32,14 @@ git clone https://github.com/FEASTorg/pyCRUMBS.git
 cd pyCRUMBS
 chmod +x setup_pycrumbs.sh
 ./setup_pycrumbs.sh
+```
+
+The CRUMBS protocol uses a CRC-8 checksum that matches the embedded AceCRC implementation.  
+Generate and compile the shared library (once per platform) with:
+
+```bash
+python scripts/generate_crc8_c99.py
+python scripts/compile_crc8_c99.py
 ```
 
 ## Hardware Requirements
